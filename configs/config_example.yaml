@@ -1,0 +1,48 @@
+step_list: ['dcm_to_nifti', 'rough_subject_mask', 'nifti_resample'] # List of processing steps that are run
+multi_processor: True
+
+dirs:
+  output: 'path' # Folder specifying where to set up output folder
+  clear_previous_output: True # If true empties the 'output' directory at the start of running
+  input_csv: 'path' # Path to the file containing the input paths
+
+dcm_to_nifti: # Config for dicom 2 nifti
+  flags: # Flags passed into dcm2niix command line, see dcm2niix documentation for options
+    f: '%p_%q_%s_dcm2nifti'
+    b: 'n'
+    ba: 'n'
+    v: '0'
+  save_metadata: True
+
+nifti_clamp:
+  max: 2000 # Window upper limit
+  min: -1350 # Window lower limit
+  load_data: True # (Re)load the data from the path (must be true after dcm_to_nifti)
+  save_intermediate: True # Save the intermediate file
+  img_tag: 'nifti_clamp' # Tag to add to the intermediate image file
+
+nifti_window:
+  max: 1000 # Window upper limit
+  min: -100 # Window lower limit
+  outside_value: 0 # Value to set pixels outside of the window to
+  load_data: True # (Re)load the data from the path (must be true after dcm_to_nifti)
+  save_intermediate: True # Save the intermediate file
+  img_tag: 'nifti_window' # Tag to add to the intermediate image file
+
+rough_subject_mask:
+  low_thresh: 160
+  high_thresh: 5000
+  dilate_radius: 7 # In mm
+  crop: False
+  margin: 6
+  load_data: True # (Re)load the data from the path (must be true after dcm_to_nifti)
+  save_intermediate: True # Save the intermediate file
+  img_tag: 'rough_subject_mask' # Tag to add to the intermediate image file
+
+nifti_resample:
+  spacing: [0.5, 0.5, 0.5]
+  new_size: [512, 512, 512]
+  interpolator: 'b_spline'
+  load_data: False # (Re)load the data from the path (must be true after dcm_to_nifti)
+  save_intermediate: True # Save the intermediate file
+  img_tag: 'resampled' # Tag to add to the intermediate image file
