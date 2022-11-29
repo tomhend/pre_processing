@@ -6,10 +6,16 @@ This repository processes CT-scans of the head. The configurations are found in 
 
 ## Processing steps
 ### Dicom to nifti
-The dicom_to_nifti step is unique in the sense that it's the only step that uses dicom folders as input to produce nifti files. For proper functioning of the further pipeline every folder should only contain the files of one CT-head. The dicoms are converted to nifti using [dcm2niix](https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage), see the documentation to understand the caveats of this method. One important aspact of dcm2niix is the correction of slice thickness and tilt. This produces extra nifti outputs. Right now (if available) the tilt corrected nifti is used for the rest of the pipeline.
+The dicom_to_nifti step is unique in the sense that it's the only step that uses dicom folders as input to produce nifti files. For proper functioning of the further pipeline every folder should only contain the files of one CT-head. The dicoms are converted to nifti using [dcm2niix](https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage), see the documentation to understand the caveats of this method. One important aspact of dcm2niix is the correction of slice thickness and tilt. This produces extra nifti outputs. Right now the corrected nifti is used for the rest of the pipeline.
 
 ### Rough subject mask
 This method removes irrelevant objects outside of the patients head. It does so by determining the skull and dilating this by a radius provided in the configurations. Everything outside of this skull is removed. Issues can arise if bone density or higher objects are near the skull (specifically within 2x the dilating distance).
 
 ### Nifti window
 Windows the nifti image to only keep values within the window and set the rest to the specified value.
+
+### Nifti clamp
+Clamps the values to minimum and maximum values
+
+### Nifit resample
+Resamples the image to a new space given the configuration parameters.
