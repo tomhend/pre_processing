@@ -56,15 +56,9 @@ def main():
     subject_subset = cfg["dirs"].get("subjects", None)
 
     # Code for running only the not processed files
-<<<<<<< Updated upstream
-    # processed_path = Path(r'L:\basic\divd\nec\SAB beelddatabank\processed_data\prosab_hydrocephalus')
-    # subject_subset = [int(path.name) for path in processed_path.iterdir()]
-
-=======
     #processed_path = Path(r'path to processed')
     #subject_subset = [int(path.name) for path in processed_path.iterdir()]
     
->>>>>>> Stashed changes
     if subject_subset:
         input_df = input_df.loc[~input_df["subjects"].isin(subject_subset)]
     subject_list = input_df["subjects"]
